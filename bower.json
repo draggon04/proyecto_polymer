@@ -14,6 +14,7 @@
     "paper-input": "PolymerElements/paper-input#^2.0.1",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "iron-checked-element-behavior": "PolymerElements/iron-checked-element-behavior#^2.0.0",
-    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1"
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "polymerfire": "firebase/polymerfire#^2.1.0"
   }
 }

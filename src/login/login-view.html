@@ -1,0 +1,68 @@
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<dom-module id="login-view">
+
+    <template>
+    	<h2>encabezado interno</h2>
+		<firebase-app
+		  auth-domain="nuevo-proyecto-cff85.firebaseapp.com"
+		  database-url="https://nuevo-proyecto-cff85.firebaseio.com/"
+		  api-key="AIzaSyBEtIvfGZcE8PZEPimtLjkcgWXcj34aquo"
+		  storage-bucket="nuevo-proyecto-cff85.appspot.com"
+		  messaging-sender-id="1009901662502">
+		</firebase-app>
+		<firebase-auth id="auth" user="{{user}}" provider="google" statusKnown="{{statusKnown}}" on-error="handleError">
+		</firebase-auth>
+		<paper-button raise on-click="login">login</paper-button>
+		<paper-button raise on-click="logout">logout</paper-button>
+		<template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
+
+    </template>
+
+    <script>
+
+      (function loginViewDefinition(loginView) {
+
+          'use strict';
+
+          class LoginView extends Polymer.Element {
+
+              static get is(){ return "login-view";}
+
+              static get properties(){
+              	return{
+              		user:{
+              			type:Object
+              		},
+              		statusKnown:{
+              			type:Object
+              		}
+              	}
+              }
+
+              logout(){
+              	return this.$.auth.signOut();
+              }
+
+              login(){
+              	return this.$.auth.signInWithPopup();
+              }
+
+				handleError(){
+					console.log(`error`);
+				}
+
+          }
+
+          customElements.define(LoginView.is, LoginView);
+
+      })(window.loginView);
+    </script>
+
+</dom-module>

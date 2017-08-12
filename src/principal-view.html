@@ -15,6 +15,7 @@
 
 <link rel="import" href="settings/settings-view.html">
 <link rel="import" href="init/init-view.html">
+<link rel="import" href="login/login-view.html">
 
 <dom-module id="principal-view">
     <template>
@@ -71,7 +72,6 @@
             position: absolute;
             left: 14px;
         }
-
         .titulo{
           height: 100px;
           width: 500px;
@@ -92,6 +92,7 @@
             <ul>
               <li><a href="/init-view"><iron-icon icon="icons:home"></iron-icon> [[localize('initViewMenuItem')]]</a></li>
               <li><a href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a></li>
+              <li><a href="/login-view">Login</a></li>
             </ul>
           </nav>
         </app-drawer>
@@ -103,9 +104,12 @@
           <iron-pages selected="[[routeData.view]]" attr-for-selected="view">
             <init-view view="init-view" tail="{{routeTail}}"></init-view>
             <settings-view view="settings-view"></settings-view>
+           <login-view view="login-view"></login-view> 
+           <!-- <div view="login-view">Login</div>-->
           </iron-pages>
         </app-header-layour>
       </app-drawer-layout>
+
 
     </template>
 
