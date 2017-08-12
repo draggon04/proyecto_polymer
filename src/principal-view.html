@@ -1,0 +1,137 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="styles/base.html">
+<link rel="import" href="polymer-custom.html">
+
+<link rel="import" href="settings/settings-view.html">
+<link rel="import" href="init/init-view.html">
+
+<dom-module id="principal-view">
+    <template>
+
+      <style include="base">
+        
+        :host {
+          --app-primary-color: black;
+          --app-secondary-color: black;
+        }
+
+        app-drawer-layout:not([narrow]) [drawer-toggle] {
+          display: none;
+        }
+
+        nav>ul>li{    
+          width: 150px;
+          height: 25px;
+          color: white;
+          background-color: lightcyan;
+          padding: 15px;
+          cursor: pointer;
+          text-decoration: none;
+          margin: 0 0 18px 0;
+          border-radius: 5%;
+          box-shadow: 0 0 3px 0 black;
+        }
+
+        nav>ul>li:hover{
+          opacity: .7;
+          background-color:  #6b1888;
+          text-decoration:none;
+          color:white;
+        }
+
+        nav>ul>li>a{
+          background-color: inherit;
+          color: gray;
+          text-decoration: none;
+          padding-top: 0px;
+          margin: 50px 0 0 20px;          
+        }
+
+        .img-logo{
+          width: 169px;
+          height: 115px;
+          top: 10px;
+          position: absolute;
+          left: 60px;
+        }
+
+        .main-menu{
+            top: 250px;
+            position: absolute;
+            left: 14px;
+        }
+
+        .titulo{
+          height: 100px;
+          width: 500px;
+        }
+
+      </style>
+
+      <app-location route="{{route}}"></app-location>
+      <app-route route="{{route}}" pattern="/:view" data="{{routeData}}" tail="{{routeTail}}"></app-route>
+
+      <app-drawer-layout class="styleCustom" fullbleed narrow="{{narrow}}">
+
+        <app-drawer slot="drawer" swipe-open="[[narrow]]">
+          <app-toolbar main-title  draw-toggle>
+            <div><img class="img-logo" src="images/logo.jpg" alt=""></div>
+          </app-toolbar>
+          <nav class="main-menu">
+            <ul>
+              <li><a href="/init-view"><iron-icon icon="icons:home"></iron-icon> [[localize('initViewMenuItem')]]</a></li>
+              <li><a href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a></li>
+            </ul>
+          </nav>
+        </app-drawer>
+
+        <app-header-layour>
+          <app-header slot="header">
+            <app-toolbar main-title><div >[[localize('mainTitle')]]</div></app-toolbar>       
+          </app-header>
+          <iron-pages selected="[[routeData.view]]" attr-for-selected="view">
+            <init-view view="init-view" tail="{{routeTail}}"></init-view>
+            <settings-view view="settings-view"></settings-view>
+          </iron-pages>
+        </app-header-layour>
+      </app-drawer-layout>
+
+    </template>
+
+    <script>
+      (function principalViewDefinition(principalView) {
+          'use strict';
+
+          class PrincipalView extends PolymerCustom(Polymer.Element)  {
+
+              static get is(){ return `principal-view`;}
+
+              static get properties(){
+                  return{
+                    routeData:{type:Object, value:{view:'init-view'}, notify:true}
+                  }
+              }
+
+              connectedCallback(){
+                super.connectedCallback();
+              }
+ 
+          }
+
+          customElements.define(PrincipalView.is, PrincipalView);
+
+      })(window.principalView);
+
+    </script>
+</dom-module>

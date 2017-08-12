@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+<link rel="import" href="item-detail.html">
+
+<dom-module id="carousel-item">
+
+    <template>
+
+      <style include="base">
+        
+        .image{
+          width: 15rem;
+          height: 15rem;
+        }
+
+        .data-img{
+            position: relative;
+            bottom: 4.7rem;
+            margin: 0;
+            padding: 0;
+            background: black;
+            opacity: 0.7;
+            color: white;
+        }
+
+        .item:hover{
+            opacity: .20;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .item-detail{
+          visibility: hidden;
+        }
+
+        .item{
+          height: 15rem;
+        }
+
+      </style>
+      <div class="item" on-click="_carouselItemSel">
+        <img class="image" src$="[[song.thumb]]">
+        <div class="data-img">
+          <p>[[song.name]]</p>
+          <p>[[song.singer]]</p>
+        </div> 
+      </div>
+      <paper-dialog id="dialogo">
+        <item-detail visible="{{visible}}" song="[[song]]" type="[[type]]"></item-detail>
+      </paper-dialog> 
+    </template>
+
+    <script>
+      (function carouselItemDefinition(carouselItem) {
+          'use strict';
+
+          class CarouselItem extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "carousel-item";}
+
+              static get properties(){
+                return{
+                  song:{
+                    type:Object,
+                    value:{},
+                    notify:true
+                  },
+                  songSelected:{
+                    type:Object,
+                    statePath:`songSelected`,
+                    observer:`_updateOncesPlayed`
+                  },
+                  visible:{
+                    type:String,
+                    value:`hidden`,
+                    notify:true
+                  },
+                  type:{
+                    type:String,
+                    value:``,
+                    notify:true
+                  }
+                }
+              }
+
+              _cambiaValor(NumVecesRep){
+                return NumVecesRep;
+              }
+
+              _updateOncesPlayed(valor){
+                  if(typeof(valor) != "undefined" && valor!=null && Object.keys(valor).length > 0 && valor.contructor !== Object && valor!=null && valor.songId===this.song.songId){
+                    this.song = null;
+                    this.song = valor;
+                    this.songSelected = null;
+                  }
+              }
+
+              _carouselItemSel(e){
+                  this.$.dialogo.open();
+              }
+          }
+
+          customElements.define(CarouselItem.is, CarouselItem);
+
+      })(window.carouselItem);
+
+    </script>
+</dom-module>

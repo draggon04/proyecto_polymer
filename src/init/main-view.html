@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+<link rel="import" href="my-carousel.html">
+
+<dom-module id="main-view">
+    <template>
+      <style include="base"></style>
+      <my-carousel subview="my-carousel" type="user" songs="[[songs]]" title="[[localize('songsMineTitle')]]"></my-carousel>
+      <my-carousel view="my-carousel" type="recomedation" songs="[[songsRecomedation]]" title="[[localize('songsRecomendations')]]"></my-carousel>
+    </template>
+    <script>
+
+      (function mainViewDefinition(mainView) {
+
+          'use strict';
+          class MainView extends PolymerCustom(Polymer.Element) {
+              static get is(){ return "main-view";}
+              static get properties(){
+                return{
+                  songs:{
+                    type:Array,
+                    statePath:`songs`,
+                  },
+                  songsRecomedation:{
+                    type:Array,
+                    statePath:`songsRecomedation`
+                  }
+                }
+            }
+          }
+
+        customElements.define(MainView.is, MainView);
+
+      })(window.mainView);
+
+    </script>
+
+</dom-module>

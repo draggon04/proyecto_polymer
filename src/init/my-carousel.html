@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+<link rel="import" href="carousel-item.html">
+
+<dom-module id="my-carousel">
+
+    <template>
+        <style include="base">
+
+          .carousel-elements{
+            display: inline-flex;
+            overflow-x: hidden;
+            width: 65rem;
+            height: 16rem;
+          }
+
+          .carousel-item{
+            height: 16rem;
+          }
+
+        </style>
+        <div>[[title]]</div>
+        <div class="carousel-elements"> 
+          <template is="dom-repeat" items="[[songs]]" as="song">
+  			     <carousel-item class="carousel-item" song="[[song]]" type="[[type]]"></carousel-item>
+          </template>
+        </div>
+    </template>
+
+    <script>
+
+      (function carouselDefinition(carousel) {
+          'use strict';
+
+          class Carousel extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "my-carousel";}
+
+              static get properties(){
+              	return {
+                  songs:{
+                    type:Array,
+                    notitfy:true
+                  },
+                  type:{
+                    type:String,
+                    value:``
+                  },
+                  title:{
+                    type:String,
+                    value:``
+                  }
+                };
+              }
+
+          }
+
+          customElements.define(Carousel.is, Carousel);
+
+      })(window.carousel);
+
+    </script>
+</dom-module>

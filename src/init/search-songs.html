@@ -1,0 +1,95 @@
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+<link rel="import" href="my-carousel.html">
+
+<dom-module id="search-song">
+    <template>
+      <style include="base">
+        
+        table>thead >tr >th:nth-child(1) {
+          width: 18rem;
+        }
+
+        table>thead>tr>th:nth-child(2) {
+          width: 18rem;
+        }
+
+      </style>
+    	<paper-input id="text2Search" label="[[localize('searchMainTitle')]]"></paper-input>
+      <paper-checkbox id="searchMyLibrary" noink>[[localize('searchBtnMyLibrarySong')]]</paper-checkbox>
+      <paper-checkbox id="searchCloud" noink>[[localize('searchBtnCloudSong')]]</paper-checkbox>
+      <paper-button on-click="_btnBuscar">[[localize('searchButtonSong')]]</paper-button>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre de la Cancion</th>            
+            <th>Cantante</th>
+            <th>Duración</th>
+            <th>Letra</th>
+          </tr>          
+        </thead>
+        <tbody>
+          <template is="dom-repeat" items="[[songs2Display]]" as="song">
+            <tr>
+              <td>[[song.name]]</td>
+              <td>[[song.singer]]</td>
+              <td>[[song.duration]]</td>
+              <td><iron-icon icon="icons:speaker-notes"></iron-icon></td>
+              <td><audio controls><source src="[[song.urlPlay]]" type="audio/ogg"><source src="[[song.urlPlay]]" type="[[audio/mpeg]]"> </audio></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+    </template>
+    <script>
+
+      (function searchSongDefinition(searchSong) {
+
+          'use strict';
+          class SearchSong extends PolymerCustom(Polymer.Element) {
+            static get is(){ return "search-song";}
+            static get properties(){
+              return{
+                songs2Display:{
+                  type:Array,
+                  value:[],
+                  notify:true
+                },
+                sognsFromRedox:{
+                  type:Array,
+                  statePath:`songs`
+                }
+              }
+            }
+
+            _btnBuscar(){
+              
+              if(this.$.searchMyLibrary.checked){
+                const songsFound = this.sognsFromRedox.filter(song=>{
+                  return song.name.includes(this.$.text2Search.value);
+                });
+
+                this.songs2Display = songsFound;
+              }
+
+            }
+
+          }
+
+        customElements.define(SearchSong.is, SearchSong);
+
+      })(window.searchSong);
+
+    </script>
+
+</dom-module>

@@ -1,0 +1,25 @@
+{
+	"es":{
+		"carruselTitle":"Mi Carrusel",
+		"initViewMenuItem":"Inicio",
+		"mainTitle":"TU SITIO DE MUSICA POR EXCELENCIA",
+		"settingViewMenuItem":"Configuración",
+		"userAddressCard":"Dirección:",
+		"userEmailCard":"Email",
+		"userGenderCard":"Sexo",
+		"songDetailName":"Nombre de la canción",
+		"songDetailSinger":"Cantante",
+		"songDetailGenre":"Genero",
+		"songDetailDuration":"Duración",
+		"songDetailTitle":"Detalle de la canción",
+		"songsMineTitle":"Mis canciones",
+		"songsRecomendations":"Recomendaciones de canciones",
+		"initMainViewTitle":"Vista Principal",
+		"initSearchTitle":"Buscar canción",
+		"searchMainTitle":"Buscador de canciones",
+		"searchButtonSong":"Buscar",
+		"searchBtnMyLibrarySong":"Mi libreria",
+		"searchBtnCloudSong":"En la nube",
+		"initMostViewTitle":"Mas reproducidas"
+	}
+}

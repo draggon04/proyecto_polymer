@@ -1,0 +1,29 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="reset.html">
+
+<dom-module id="base">
+  <template>
+  <style is="base" include="reset">
+  	html{
+      
+  	}
+
+    body{
+    	--primary-text-color:gray;
+    	height: 500px;
+    }
+
+    tr{
+      height: 3rem;
+    }
+
+    tbody>tr:nth-child(odd){
+      color:white;
+      background-color: #8c48aa;
+      
+    }
+
+
+  </style>
+  </template>
+</dom-module>

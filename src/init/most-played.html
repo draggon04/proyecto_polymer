@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+
+<dom-module id="most-played">
+
+    <template>
+      <style include="base">
+        
+      </style>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Canción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template is="dom-repeat" items="[[songsToDisplay]]" as="song" sort="_ordenar" observer = "type numOncesPlayed">
+            <tr>
+              <td>[[song.name]]</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+    </template>
+
+    <script>
+
+      (function mostPlayedDefinition(mostPlayed) {
+          'use strict';
+
+          class MostPlayed extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "most-played";}
+
+              static get properties(){
+                return{
+                    songsFromRedox:{
+                      type:Array,
+                      statePath:`songs`,
+                      observer:`_songUpdate`
+                    },
+                    songsToDisplay:{
+                      type:Array,
+                      notify:true
+                    }
+                }
+              }
+
+              _ordenar(song1, song2){
+
+                    return song1.numOncesPlayed == song2.numOncesPlayed? 0: song2.numOncesPlayed > song1.numOncesPlayed? 1: -1;
+
+              }
+
+              _songUpdate(songs){
+                console.log(`_songUpdate list updated`);
+                this.songsToDisplay = null;
+                this.songsToDisplay = songs;
+              }
+          }
+
+          customElements.define(MostPlayed.is, MostPlayed);
+
+      })(window.mostPlayed);
+
+
+    </script>
+
+</dom-module>

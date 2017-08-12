@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+<link rel="import" href="user-data.html">
+
+<dom-module id="account-user">
+    <template>
+        <user-data></user-data>
+    </template>
+
+    <script>
+      (function accountDefinition(accountUser) {
+          'use strict';
+
+          class AccountUser extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "account-user";} 
+          }
+
+          customElements.define(AccountUser.is, AccountUser);
+
+      })(window.accountUser);
+
+    </script>
+</dom-module>

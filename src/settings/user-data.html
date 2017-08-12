@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+
+<dom-module id="user-data">
+    <template>
+
+      <style include="base">
+      
+        .header-card{
+          --iron-image-width:250px;
+          width: 15rem;
+        }
+
+      </style>
+
+      <paper-card class="header-card" image="[[user.image]]">
+        <div class="card-content">
+          <div class="card-header">
+           <b>[[user.name]]</b>
+          </div>
+          <div>
+            <p><b>[[localize('userAddressCard')]]:</b> [[user.address]] </p>
+            <p><b>[[localize('userEmailCard')]]:</b> [[user.email]] </p>
+            <p><b>[[localize('userGenderCard')]]:</b> [[user.gender]] </p>
+          </div>
+        </div>
+      </paper-card>
+
+    </template>
+
+    <script>
+      (function userDataDefinition(userData) {
+          'use strict';
+
+          class UserData extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "user-data";}
+
+              static get properties(){
+                return{
+                  user:{
+                    type:Object,
+                    statePath:`user`
+                  }
+                }
+              } 
+          }
+
+          customElements.define(UserData.is, UserData);
+
+      })(window.userData);
+
+    </script>
+</dom-module>

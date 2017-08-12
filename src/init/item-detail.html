@@ -1,0 +1,125 @@
+<link rel="import" href="../../bower_components/if-diff/if-diff.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+
+<dom-module id="item-detail">
+    <template>
+      
+      <style include="base">
+        
+        .item-detail-header{
+          background-color: #37a0ce;
+          height: 2.5rem;
+          font-weight: bold;
+          margin: 0;
+          color: white;
+          padding: 1rem 0 0 2rem;
+
+        }
+
+        .item-detail-header-desc{
+          height: auto;
+          width: 15rem;
+          margin:0 auto;
+        }
+
+        .detail{
+          width: 20rem;
+        }
+
+        .button-circle{
+          border-radius: 50%;
+          background-color: lightgrey;
+          width: 25px;
+          height: 25px;
+        }
+
+      </style>
+          <div class="item-detail-header">
+            <h2 class="item-detail-header-desc">[[localize("songDetailTitle")]]</h2>
+          </div>
+          <div>
+            <p class="detail"><b>[[localize('songDetailName')]]:</b> [[song.name]]</p>
+            <p><b>[[localize('songDetailSinger')]]:</b> [[song.singer]]</p>
+            <p><b>[[localize('songDetailGenre')]]:</b> [[song.genre]]</p>
+            <p><b>[[localize('songDetailDuration')]]:</b> [[song.duration]]</p>
+          </div>
+        <div class="buttons">
+
+          <iron-icon icon="av:play-circle-filled" on-click="_btnPlayClicked"></iron-icon>
+          <div class="button-circle">
+            <if-diff if="" lhs="[[type]]" equals rhs="user">
+              <template>
+                <iron-icon icon="icons:check" on-click="_btnAddClicked"></iron-icon>
+              </template>
+            </if-diff>
+            <if-diff if="" lhs="[[type]]" equals rhs="recomedation">
+              <template>
+                <iron-icon icon="icons:add" on-click="_btnAddClicked"></iron-icon>               
+              </template>
+            </if-diff>
+          </div>
+          
+        </div>
+    </template>
+
+    <script>
+      (function itemDetailDefinition(itemDetail) {
+          'use strict';
+
+          class ItemDetail extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return "item-detail";}
+
+              static get properties(){
+                return{
+                  song:{
+                    type:Object,
+                    notify:true
+                  },
+                  icon:{
+                    type:String,
+                    value:`icons:add`
+                  },
+                  type:{
+                    type:String,
+                    value:``,
+                    notify:true
+                  }
+                }
+              }
+
+              _btnAddClicked(){
+
+                  if(this.type == `user`){
+                    this.dispatch({type:`DEL_SONG`, data:{songId:this.song.songId}});
+                    this.type=`recomedation`;
+                  }
+                  else{
+                    this.dispatch({type:`ADD_SONG`, data:{songId:this.song.songId}});
+                    this.type=`user`;                  
+                  }
+              }
+
+              _btnPlayClicked(){
+                  this.dispatch({type:`PLAY_SONG`, data:{songId:this.song.songId} });
+              }
+
+              _cerrarVenta(){
+                console.log(`Ventana Cerrada`);
+              }
+
+          }
+
+          customElements.define(ItemDetail.is, ItemDetail);
+
+      })(window.itemDetail);
+
+    </script>
+</dom-module>
