@@ -1,0 +1,11 @@
+<script>
+	function authState(store, auth){
+		auth.onAuthStateChanged(function(user){
+			if(user){
+				store.dispatch({type:`UPDATE_USER`, detail: user});
+			} else {
+				store.dispatch({type:`UPDATE_USER`});
+			}
+		})
+	}
+</script>

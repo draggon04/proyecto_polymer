@@ -1,13 +1,14 @@
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/shadycss/apply-shim.html">
 
 <link rel="import" href="styles/base.html">
@@ -92,24 +93,22 @@
             <ul>
               <li><a href="/init-view"><iron-icon icon="icons:home"></iron-icon> [[localize('initViewMenuItem')]]</a></li>
               <li><a href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a></li>
-              <li><a href="/login-view">Login</a></li>
+              <li><a href="/login-view"><iron-icon icon="icons:account-box"></iron-icon> Login</a></li>
             </ul>
           </nav>
         </app-drawer>
 
         <app-header-layour>
           <app-header slot="header">
-            <app-toolbar main-title><div >[[localize('mainTitle')]]</div></app-toolbar>       
+            <app-toolbar main-title><div >[[localize('mainTitle')]] [[user.displayName]]</div></app-toolbar>       
           </app-header>
           <iron-pages selected="[[routeData.view]]" attr-for-selected="view">
             <init-view view="init-view" tail="{{routeTail}}"></init-view>
             <settings-view view="settings-view"></settings-view>
-           <login-view view="login-view"></login-view> 
-           <!-- <div view="login-view">Login</div>-->
+           <login-view view="login-view"></login-view>
           </iron-pages>
         </app-header-layour>
       </app-drawer-layout>
-
 
     </template>
 
@@ -123,12 +122,21 @@
 
               static get properties(){
                   return{
-                    routeData:{type:Object, value:{view:'init-view'}, notify:true}
+                    routeData:{
+                      type:Object,
+                      value:{view:'init-view'},
+                      notify:true
+                    },
+                    user:{
+                      type:Object,
+                      statePath:`user`,
+                      observer:`_foo`
+                    }
                   }
               }
 
-              connectedCallback(){
-                super.connectedCallback();
+              _foo(user){
+                console.log(`${user}`);
               }
  
           }

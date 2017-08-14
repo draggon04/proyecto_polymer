@@ -1,0 +1,15 @@
+<script>
+	const initialUser = {
+		user:null
+	};
+
+	const userReducer = function(state=initialUser, action){
+		switch(action.type){
+
+			case `UPDATE_USER`:
+				return Object.assign({}, state, {user:action.data});
+			default:
+				return state;
+		}
+	}
+</script>

@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<dom-module id="authenticate-user">
+    <template>
+    <!--  <firebase-app 
+      auth-domain="nuevo-proyecto-cff85.firebaseapp.com"
+      database-url="https://nuevo-proyecto-cff85.firebaseio.com/"
+      api-key="AIzaSyBEtIvfGZcE8PZEPimtLjkcgWXcj34aquo"
+      storage-bucket="nuevo-proyecto-cff85.appspot.com"
+      messaging-sender-id="1009901662502"></firebase-app>
+      <firebase-auth id="auth" user="{{user}}" provider="google" statusKnown="{{statusKnown}}" on-error="handleErro"></firebase-auth>
+    -->  <firebase-query 
+        id="query" 
+        path="/users/[[user.uid]]/songs" 
+        data="{{songs}}">
+      </firebase-query>
+
+    </template>
+
+    <script>
+
+
+      //(function authenticateUserDefinition(authenticateUser) {
+          'use strict';
+
+//          let AuthenticateUser = function(classBase){
+
+           // return class extends classBase{
+        class AuthenticateUser extends Polymer.Element{
+            static get is(){return `authenticate-user`;}
+
+              constructor(){
+                super();
+              }
+
+              static get properties(){
+                  return{
+                    user:{
+                      type:Object
+                    },
+                    statusKnown:{
+                      type:Object
+                    }
+                  }
+              }
+
+              loginUser(){
+
+                  return this.$.auth.signInWithPopup();
+
+              }
+
+              logoutUser(){
+                  return this.$.auth.signOut();
+
+              }
+
+            }
+
+            customElements.define(AuthenticateUser.is, AuthenticateUser);
+
+       //   }
+
+     // })(window.authenticateUser);
+
+    </script>
+
+</dom-module>

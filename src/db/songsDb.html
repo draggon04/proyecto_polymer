@@ -1,0 +1,7 @@
+<script>
+	function songAddListeners(store, db){
+		db.ref(`songs`).on(`child_added`, function(data){
+			store.dispatch({type:`ADD_SONG`, data: data.val()});
+		});
+	}
+</script>

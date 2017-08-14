@@ -1,10 +1,99 @@
+<!--<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+<link rel="import" href="../authentication/authenticate-user.html">
+
+<dom-module id="login-view">
+
+    <template>
+      <h2>encabezado interno</h2>
+    <paper-button raise on-click="login">login</paper-button>
+    <paper-button raise on-click="logout">logout</paper-button>
+    <template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
+    <template is="dom-repeat" items="[[songs]]" as="song">
+      <p>[[song.name]]</p>
+      <paper-button song="[[song]]" on-click="_removeSong">
+        <iron-icon icon="icons:clear"></iron-icon>
+      </paper-button>
+    </template>
+
+    <paper-input id="songName"></paper-input>
+    <paper-button  on-click="_saveSong">Guardar</paper-button>
+    </template>
+
+    <script>
+
+      (function loginViewDefinition(loginView) {
+
+          'use strict';
+
+          class LoginView extends AuthenticateUser(Polymer.Element) {
+
+              static get is(){ return "login-view";}
+
+              static get properties(){
+                return{
+                  songs:{
+                    type:Object
+                  },
+                  statusKnown:{
+                    type:Object
+                  },
+                  userInfo:{
+                    type:Object
+                  }
+                }
+              }
+
+              _removeSong(e){
+                  const key = e.currentTarget.song.$key;
+                  this.$.query.ref.child(key).remove();
+              }
+
+              _saveSong(){
+                this.$.query.ref.push({name:this.$.songName.value});
+                this.$.songName.value = null;
+              }
+
+              logout(){
+                return this.logoutUser();
+              }
+
+              login(){
+                return this.loginUser();
+              }
+
+        handleError(){
+          console.log(`error`);
+        }
+
+          }
+
+          customElements.define(LoginView.is, LoginView);
+
+      })(window.loginView);
+    </script>
+
+</dom-module>-->
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../redux-mixin/redux-mixin.html">
 
 <dom-module id="login-view">
 
@@ -19,10 +108,23 @@
 		</firebase-app>
 		<firebase-auth id="auth" user="{{user}}" provider="google" statusKnown="{{statusKnown}}" on-error="handleError">
 		</firebase-auth>
+    <firebase-query 
+      id="query" 
+      path="/users/[[user.uid]]/songs" 
+      data="{{songs}}">
+    </firebase-query>
 		<paper-button raise on-click="login">login</paper-button>
 		<paper-button raise on-click="logout">logout</paper-button>
 		<template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
+    <template is="dom-repeat" items="[[songs]]" as="song">
+      <p>[[song.name]]</p>
+      <paper-button song="[[song]]" on-click="_removeSong">
+        <iron-icon icon="icons:clear"></iron-icon>
+      </paper-button>
+    </template>
 
+    <paper-input id="songName"></paper-input>
+    <paper-button  on-click="_saveSong">Guardar</paper-button>
     </template>
 
     <script>
@@ -31,26 +133,54 @@
 
           'use strict';
 
-          class LoginView extends Polymer.Element {
+          class LoginView extends PolymerCustom(Polymer.Element) {
 
               static get is(){ return "login-view";}
 
               static get properties(){
               	return{
-              		user:{
+              		songs:{
               			type:Object
               		},
               		statusKnown:{
               			type:Object
-              		}
+              		},
+                  userInfo:{
+                    type:Object
+                  },
+                  user:{
+                    type:Object,
+                    observer:`_usuarioStatusChanged`
+                  }
               	}
               }
 
+              _usuarioStatusChanged(user){
+
+                let userInf = {user:null};
+                if(user != null)
+                  userInf = user;
+                this.dispatch( {type:`UPDATE_USER`, data: userInf});
+              }
+
+              _removeSong(e){
+                  const key = e.currentTarget.song.$key;
+                  this.$.query.ref.child(key).remove();
+              }
+
+              _saveSong(){
+                this.$.query.ref.push({name:this.$.songName.value, age:24});
+                this.$.songName.value = null;
+              }
+
               logout(){
+                //this.dispatch( {type:`UPDATE_USER`, data: {user:null} });
               	return this.$.auth.signOut();
               }
 
               login(){
+
+                //this.dispatch( {type:`UPDATE_USER`, data: this.user});
               	return this.$.auth.signInWithPopup();
               }
 

@@ -1,33 +1,84 @@
+<!--<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-script.html">
+<link rel="import" href="appReducer.html">
+<link rel="import" href="userReducer.html">
+<link rel="import" href="songReducer.html">
+
+<link rel="import" href="../db/authDb.html">
+<link rel="import" href="../db/songsDb.html">
+
+<script>
+	const config = {
+		apiKey: "AIzaSyBEtIvfGZcE8PZEPimtLjkcgWXcj34aquo",
+		authDomain: "nuevo-proyecto-cff85.firebaseapp.com",
+		databaseURL: "https://nuevo-proyecto-cff85.firebaseio.com",
+		projectId: "nuevo-proyecto-cff85",
+		storageBucket: "nuevo-proyecto-cff85.appspot.com",
+		messagingSenderId: "1009901662502"
+	};
+	
+	firebase.initializeApp(config);
+
+	const auth = firebase.auth();
+	const db = firebase.database();
+	const ReduxThunk = window.ReduxThunk.default;
+
+	const reducers = Redux.combineReducers({
+		app:appReducer,
+		user:userReducer,
+		song:songReducer
+	});
+
+	const store = Redux.createStore(
+			reducers,
+			Redux.compose(
+				Redux.applyMiddleware(ReduxThunk),
+				window.devToolsExtension?window.devToolsExtension(): f=>f
+			)
+		);
+
+	authState(store, auth);
+	songAddListeners(store, db);
+
+	const ReduxMixin=PolymerRedux(store);
+
+</script>
+-->
 <link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<link rel="import" href="../db/authDb.html">
+<link rel="import" href="../db/songsDb.html">
 
 <script>
 
-	const initialState = {
+/*	
+const initialState = {
 		"language":"es",
 		user:{name:`Heraldo Lema Sanchez`, email:`dgheraldo6@yopmail.com`, address:`Lafoz No. 779, San Luis Potosí, Mexico, C.P. 63083`, gender:`Masculino`, image:`images/person.png`},
 		songs:[
-			{songId:1,name:`Master Of Puppets`, singer:`Metallica`, 	album:`Master Of Puppets`, duration:`8:36`, genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:2,name:`Carretero`, singer:`Buena Vista Social Club`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:3,name:`Cancion 3`, singer:`Cantante 3`,			album:`Album 4`, duration:`8:36`, genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:4,name:`Cancion 4`, singer:`Cantante 4`,			album:`Album 3`, duration:`8:36`, genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:5,name:`Cancion 5`, singer:`Cantante 5`,			album:`Album 2`, duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:6,name:`Cancion 6`, singer:`Cantante 6`,			album:`Album 7`, duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:7,name:`Cancion 7`, singer:`Cantante 7`,			album:`Album 4`, duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:8,name:`Cancion 8`, singer:`Cantante 8`,			album:`Album 3`, duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:9,name:`Cancion 9`, singer:`Cantante 9`,			album:`Album 2`, duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:10,name:`Cancion 10`, singer:`Cantante 10`,			album:`Album 4`, duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``,numOncesPlayed:0}
+			{songId:1,name:`Master Of Puppets`, singer:`Metallica`, 	album:`Master Of Puppets`, duration:`8:36`, genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:2,name:`Carretero`, singer:`Buena Vista Social Club`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:3,name:`Cancion 3`, singer:`Cantante 3`,			album:`Album 4`, duration:`8:36`, genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:4,name:`Cancion 4`, singer:`Cantante 4`,			album:`Album 3`, duration:`8:36`, genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:5,name:`Cancion 5`, singer:`Cantante 5`,			album:`Album 2`, duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:6,name:`Cancion 6`, singer:`Cantante 6`,			album:`Album 7`, duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:7,name:`Cancion 7`, singer:`Cantante 7`,			album:`Album 4`, duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:8,name:`Cancion 8`, singer:`Cantante 8`,			album:`Album 3`, duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:9,name:`Cancion 9`, singer:`Cantante 9`,			album:`Album 2`, duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:10,name:`Cancion 10`, singer:`Cantante 10`,			album:`Album 4`, duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``,numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
 		],
 		songsRecomedation:[
-			{songId:11,name:`Nueva Recomendación`,	singer:`Metallica`, 	album:`Master Of Puppets`,  duration:`8:36`,	genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:12,name:`Carretero 2000`, 		singer:`Second Company`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:13,name:`Cancion 3`, 			singer:`Cantante 3`,	album:`Album 4`, 			duration:`8:36`, 	genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:14,name:`Cancion 4`, 			singer:`Cantante 4`,	album:`Album 3`,				duration:`8:36`,	genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:15,name:`Cancion 5`, 			singer:`Cantante 5`,	album:`Album 2`,				duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:16,name:`Cancion 6`, 			singer:`Cantante 6`,	album:`Album 7`, 			duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:17,name:`Cancion 7`, 			singer:`Cantante 7`,	album:`Album 4`, 			duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:18,name:`Cancion 8`, 			singer:`Cantante 8`,	album:`Album 3`, 			duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:19,name:`Cancion 9`, 			singer:`Cantante 9`,	album:`Album 2`,				duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0},
-			{songId:20,name:`Cancion 10`, 			singer:`Cantante 10`,	album:`Album 4`,				duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``, numOncesPlayed:0}
+			{songId:11,name:`Nueva Recomendación`,	singer:`Metallica`, 	album:`Master Of Puppets`,  duration:`8:36`,	genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:12,name:`Carretero 2000`, 		singer:`Second Company`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:13,name:`Cancion 3`, 			singer:`Cantante 3`,	album:`Album 4`, 			duration:`8:36`, 	genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:14,name:`Cancion 4`, 			singer:`Cantante 4`,	album:`Album 3`,				duration:`8:36`,	genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:15,name:`Cancion 5`, 			singer:`Cantante 5`,	album:`Album 2`,				duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:16,name:`Cancion 6`, 			singer:`Cantante 6`,	album:`Album 7`, 			duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:17,name:`Cancion 7`, 			singer:`Cantante 7`,	album:`Album 4`, 			duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:18,name:`Cancion 8`, 			singer:`Cantante 8`,	album:`Album 3`, 			duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:19,name:`Cancion 9`, 			singer:`Cantante 9`,	album:`Album 2`,				duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:20,name:`Cancion 10`, 			singer:`Cantante 10`,	album:`Album 4`,				duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
 		],
 		songsSuggestion:[],
 		songSelected:{}
@@ -36,6 +87,119 @@
 	const reducer = function(state=initialState, action){
 
 		switch(action.type){
+			case `UPDATE_USER`:
+
+				return Object.assign({}, state, {user:action.data});
+
+			case `ADD_SONG`:
+
+				let songFoundRecIdx = 	state.songsRecomedation.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});				
+
+				let songsRecomedation = state.songsRecomedation.splice(0);
+
+				let songAdd=songsRecomedation.splice(songFoundRecIdx, 1);
+
+				let songsUser = state.songs.splice(0);
+				songsUser.splice(0, 0, songAdd[0]);				
+
+				return Object.assign({}, state, {songs:songsUser, songsRecomedation:songsRecomedation});
+
+			case `DEL_SONG`:
+				let songFoundRecIdxDel = 	state.songs.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});				
+
+				let songsUserDel = state.songs.splice(0);
+
+				let songDel=songsUserDel.splice(songFoundRecIdxDel, 1);
+
+				let songsRecomationDel = state.songsRecomedation.splice(0);
+				songsRecomationDel.splice(0, 0, songDel[0]);				
+
+				return Object.assign({}, state, {songs:songsUserDel, songsRecomedation:songsRecomationDel});
+			case `PLAY_SONG`:
+				console.log(`PLAY_SONG`);
+				let songs2Play =	state.songs.splice(0);
+				let song2PlayIdx =songs2Play.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});
+
+				let song2Play = songs2Play[song2PlayIdx];
+
+				song2Play.numOncesPlayed += 1;
+
+				songs2Play.splice(song2PlayIdx, 1, song2Play);
+
+				let songToApp = songs2Play.splice(0);
+
+				return Object.assign({}, state, {songs:songToApp, songSelected:song2Play});
+			case `SELECT_SONG`:				
+				console.log(`PLAY_SONG`);
+
+				let song2Select =state.songs.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});
+
+				return Object.assign({}, state, {songSelected : song2Select});
+
+			default:
+			 	return state;
+		}
+	}*/
+const initialState = {
+		"language":"es",
+		user:{name:`Heraldo Lema Sanchez`, email:`dgheraldo6@yopmail.com`, address:`Lafoz No. 779, San Luis Potosí, Mexico, C.P. 63083`, gender:`Masculino`, image:`images/person.png`},
+		songs:[
+			{songId:1,name:`Master Of Puppets`, singer:`Metallica`, 	album:`Master Of Puppets`, duration:`8:36`, genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:2,name:`Carretero`, singer:`Buena Vista Social Club`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:3,name:`Cancion 3`, singer:`Cantante 3`,			album:`Album 4`, duration:`8:36`, genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:4,name:`Cancion 4`, singer:`Cantante 4`,			album:`Album 3`, duration:`8:36`, genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:5,name:`Cancion 5`, singer:`Cantante 5`,			album:`Album 2`, duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:6,name:`Cancion 6`, singer:`Cantante 6`,			album:`Album 7`, duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:7,name:`Cancion 7`, singer:`Cantante 7`,			album:`Album 4`, duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:8,name:`Cancion 8`, singer:`Cantante 8`,			album:`Album 3`, duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:9,name:`Cancion 9`, singer:`Cantante 9`,			album:`Album 2`, duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:10,name:`Cancion 10`, singer:`Cantante 10`,			album:`Album 4`, duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``,numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
+		],
+		songsRecomedation:[
+			{songId:11,name:`Nueva Recomendación`,	singer:`Metallica`, 	album:`Master Of Puppets`,  duration:`8:36`,	genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:12,name:`Carretero 2000`, 		singer:`Second Company`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:13,name:`Cancion 3`, 			singer:`Cantante 3`,	album:`Album 4`, 			duration:`8:36`, 	genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:14,name:`Cancion 4`, 			singer:`Cantante 4`,	album:`Album 3`,				duration:`8:36`,	genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:15,name:`Cancion 5`, 			singer:`Cantante 5`,	album:`Album 2`,				duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:16,name:`Cancion 6`, 			singer:`Cantante 6`,	album:`Album 7`, 			duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:17,name:`Cancion 7`, 			singer:`Cantante 7`,	album:`Album 4`, 			duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:18,name:`Cancion 8`, 			singer:`Cantante 8`,	album:`Album 3`, 			duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:19,name:`Cancion 9`, 			singer:`Cantante 9`,	album:`Album 2`,				duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:20,name:`Cancion 10`, 			singer:`Cantante 10`,	album:`Album 4`,				duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
+		],
+		songsSuggestion:[],
+		songSelected:{}
+	}
+	const config = {
+		apiKey: "AIzaSyBEtIvfGZcE8PZEPimtLjkcgWXcj34aquo",
+		authDomain: "nuevo-proyecto-cff85.firebaseapp.com",
+		databaseURL: "https://nuevo-proyecto-cff85.firebaseio.com",
+		projectId: "nuevo-proyecto-cff85",
+		storageBucket: "nuevo-proyecto-cff85.appspot.com",
+		messagingSenderId: "1009901662502"
+	};
+
+	firebase.initializeApp(config);
+
+	const auth = firebase.auth();
+	const db = firebase.database();
+	const ReduxThunk = window.ReduxThunk.default;
+
+	const reducer = function(state=initialState, action){
+
+		switch(action.type){
+			case `UPDATE_USER`:
+
+				return Object.assign({}, state, {user:action.data});
+
 			case `ADD_SONG`:
 
 				let songFoundRecIdx = 	state.songsRecomedation.findIndex(element=>{
@@ -94,7 +258,14 @@
 		}
 	}
 
-	const store = Redux.createStore(reducer, initialState);
+	//const reducers = Redux.combineReducers({appReducer, userReducer, songReducer});
+	//const store = Redux.createStore(reducer, initialState);
+	const store = Redux.createStore(reducer, 
+						Redux.compose(Redux.applyMiddleware(ReduxThunk), 
+							window.devToolsExtension?window.devToolsExtension():f=>f));
+
+	authState(store, auth);
+	songAddListeners(store, db);
 
 	ReduxMixin = PolymerRedux(store);
 

@@ -20,7 +20,7 @@
 
 			connectedCallback(){
 				super.connectedCallback();
-				this.loadResources(`../locales/${this.language}.json`);
+				this.loadResources(this.resolveUrl(`../../locales/${this.language}.json`));
 			}
 		}
 	}

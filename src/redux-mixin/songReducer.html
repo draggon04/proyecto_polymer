@@ -1,0 +1,91 @@
+<script>
+	const initialSong = {
+		songs:[
+			{songId:1,name:`Master Of Puppets`, singer:`Metallica`, 	album:`Master Of Puppets`, duration:`8:36`, genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:2,name:`Carretero`, singer:`Buena Vista Social Club`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:3,name:`Cancion 3`, singer:`Cantante 3`,			album:`Album 4`, duration:`8:36`, genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:4,name:`Cancion 4`, singer:`Cantante 4`,			album:`Album 3`, duration:`8:36`, genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:5,name:`Cancion 5`, singer:`Cantante 5`,			album:`Album 2`, duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:6,name:`Cancion 6`, singer:`Cantante 6`,			album:`Album 7`, duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:7,name:`Cancion 7`, singer:`Cantante 7`,			album:`Album 4`, duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:8,name:`Cancion 8`, singer:`Cantante 8`,			album:`Album 3`, duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:9,name:`Cancion 9`, singer:`Cantante 9`,			album:`Album 2`, duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:10,name:`Cancion 10`, singer:`Cantante 10`,			album:`Album 4`, duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``,numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
+		],
+		songsRecomedation:[
+			{songId:11,name:`Nueva Recomendación`,	singer:`Metallica`, 	album:`Master Of Puppets`,  duration:`8:36`,	genre:`metal`, thumb:`/images/master-puppets.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:12,name:`Carretero 2000`, 		singer:`Second Company`,album:`Buena Vista Social Club`, duration:`3:30`, genre:`son cubano`, thumb:`/images/buena_vista_social_club_carretero.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:13,name:`Cancion 3`, 			singer:`Cantante 3`,	album:`Album 4`, 			duration:`8:36`, 	genre:`salsa`, thumb:`/images/imagen3.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:14,name:`Cancion 4`, 			singer:`Cantante 4`,	album:`Album 3`,				duration:`8:36`,	genre:`cumbia`, thumb:`/images/imagen4.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:15,name:`Cancion 5`, 			singer:`Cantante 5`,	album:`Album 2`,				duration:`8:36`, genre:`rock`, thumb:`/images/imagen5.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:16,name:`Cancion 6`, 			singer:`Cantante 6`,	album:`Album 7`, 			duration:`8:36`, genre:`bachata`, thumb:`/images/imagen6.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:17,name:`Cancion 7`, 			singer:`Cantante 7`,	album:`Album 4`, 			duration:`8:36`, genre:`merenge`, thumb:`/images/imagen7.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:18,name:`Cancion 8`, 			singer:`Cantante 8`,	album:`Album 3`, 			duration:`8:36`, genre:`huaracha`, thumb:`/images/imagen8.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:19,name:`Cancion 9`, 			singer:`Cantante 9`,	album:`Album 2`,				duration:`8:36`, genre:`blues`, thumb:`/images/imagen9.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`},
+			{songId:20,name:`Cancion 10`, 			singer:`Cantante 10`,	album:`Album 4`,				duration:`8:36`, genre:`jazz`, thumb:`/images/imagen10.jpg`, downloaded:false, lyric:``, numOncesPlayed:0,urlPlay:`http://ra-m4a-64.cdn107.com/08/1d/73/081d73f561460ffab662d6575244cc7f.m4a`}
+		],
+		songsSuggestion:[],
+		songSelected:{}
+	};
+
+	const songReducer = function(state=initialSong, action){
+		switch(action.type){
+			case `ADD_SONG`:
+
+				let songFoundRecIdx = 	state.songsRecomedation.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});				
+
+				let songsRecomedation = state.songsRecomedation.splice(0);
+
+				let songAdd=songsRecomedation.splice(songFoundRecIdx, 1);
+
+				let songsUser = state.songs.splice(0);
+				songsUser.splice(0, 0, songAdd[0]);				
+
+				return Object.assign({}, state, {songs:songsUser, songsRecomedation:songsRecomedation});
+
+			case `DEL_SONG`:
+				let songFoundRecIdxDel = 	state.songs.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});				
+
+				let songsUserDel = state.songs.splice(0);
+
+				let songDel=songsUserDel.splice(songFoundRecIdxDel, 1);
+
+				let songsRecomationDel = state.songsRecomedation.splice(0);
+				songsRecomationDel.splice(0, 0, songDel[0]);				
+
+				return Object.assign({}, state, {songs:songsUserDel, songsRecomedation:songsRecomationDel});
+			case `PLAY_SONG`:
+				console.log(`PLAY_SONG`);
+				let songs2Play =	state.songs.splice(0);
+				let song2PlayIdx =songs2Play.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});
+
+				let song2Play = songs2Play[song2PlayIdx];
+
+				song2Play.numOncesPlayed += 1;
+
+				songs2Play.splice(song2PlayIdx, 1, song2Play);
+
+				let songToApp = songs2Play.splice(0);
+
+				return Object.assign({}, state, {songs:songToApp, songSelected:song2Play});
+			case `SELECT_SONG`:				
+				console.log(`PLAY_SONG`);
+
+				let song2Select =state.songs.findIndex(element=>{
+					return element.songId === action.data.songId;
+				});
+
+				return Object.assign({}, state, {songSelected : song2Select});
+
+			default:
+			 	return state;
+			
+		}
+	}
+</script>
