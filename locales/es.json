@@ -20,6 +20,10 @@
 		"searchButtonSong":"Buscar",
 		"searchBtnMyLibrarySong":"Mi libreria",
 		"searchBtnCloudSong":"En la nube",
-		"initMostViewTitle":"Mas reproducidas"
+		"initMostViewTitle":"Mas reproducidas",
+		"dlgLyricAddTitle":"Letra de la canción",
+		"dlgLyricAddSongName":"Nombre de la canción:",
+		"dlgLyricAddSongLyric":"letra de la canción",
+		"dlgLyricAddSongBSubmit":"Agregar Letra"
 	}
 }

@@ -17,15 +17,13 @@
 
       </style>
 
-      <paper-card class="header-card" image="[[user.image]]">
+      <paper-card class="header-card" image="[[user.photoURL]]">
         <div class="card-content">
           <div class="card-header">
-           <b>[[user.name]]</b>
+           <b>[[user.displayName]]</b>
           </div>
           <div>
-            <p><b>[[localize('userAddressCard')]]:</b> [[user.address]] </p>
-            <p><b>[[localize('userEmailCard')]]:</b> [[user.email]] </p>
-            <p><b>[[localize('userGenderCard')]]:</b> [[user.gender]] </p>
+            <p><b>[[localize('userEmailCard')]]</b> [[user.email]] </p>
           </div>
         </div>
       </paper-card>
@@ -44,10 +42,11 @@
                 return{
                   user:{
                     type:Object,
-                    statePath:`user`
+                    statePath:`user`,
+                    observer:`_userChanged`
                   }
                 }
-              } 
+              }
           }
 
           customElements.define(UserData.is, UserData);

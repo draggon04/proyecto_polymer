@@ -12,7 +12,33 @@
         
       </style>
 
-      <table>
+            <table>
+        <thead>
+          <tr>
+            <th>Nombre de la Cancion</th>            
+            <th>Cantante</th>
+            <th>Duración</th>
+            <th>Letra</th>
+          </tr>          
+        </thead>
+        <tbody>
+          <template is="dom-repeat" items="[[songsToDisplay]]" as="song" sort="_ordenar" observer = "type numOncesPlayed">
+            <tr>
+              <td>[[song.name]]</td>
+              <td>[[song.singer]]</td>
+              <td>[[song.duration]]</td>
+              <td>
+                <add-lyric song="[[song]]"></add-lyric>
+              </td>
+              <td><audio controls>
+                  <source src="[[song.urlPlay]]" type="audio/ogg">
+                  <source src="[[song.urlPlay]]" type="audio/mpeg"> </audio></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+<!--      <table>
         <thead>
           <tr>
             <th>Canción</th>
@@ -25,7 +51,7 @@
             </tr>
           </template>
         </tbody>
-      </table>
+      </table>-->
 
     </template>
 

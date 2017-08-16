@@ -17,7 +17,7 @@
           background-color: #37a0ce;
           height: 2.5rem;
           font-weight: bold;
-          margin: 0;
+          margin: -1.25rem 0 0 0;
           color: white;
           padding: 1rem 0 0 2rem;
 
@@ -40,6 +40,12 @@
           height: 25px;
         }
 
+        .buttons{
+          width: 200px;
+          height: 30px;
+          display: inline-flex;
+        }
+
       </style>
           <div class="item-detail-header">
             <h2 class="item-detail-header-desc">[[localize("songDetailTitle")]]</h2>
@@ -51,17 +57,16 @@
             <p><b>[[localize('songDetailDuration')]]:</b> [[song.duration]]</p>
           </div>
         <div class="buttons">
-
-          <iron-icon icon="av:play-circle-filled" on-click="_btnPlayClicked"></iron-icon>
+          <iron-icon  class="button-circle"  song="[[song]]" icon="av:play-circle-filled" on-click="_btnPlayClicked"></iron-icon>
           <div class="button-circle">
             <if-diff if="" lhs="[[type]]" equals rhs="user">
               <template>
-                <iron-icon icon="icons:check" on-click="_btnAddClicked"></iron-icon>
+                <iron-icon  class="button-circle" icon="icons:check" on-click="_btnAddClicked"></iron-icon>
               </template>
             </if-diff>
             <if-diff if="" lhs="[[type]]" equals rhs="recomedation">
               <template>
-                <iron-icon icon="icons:add" on-click="_btnAddClicked"></iron-icon>               
+                <iron-icon class="button-circle" icon="icons:add" on-click="_btnAddClicked"></iron-icon>               
               </template>
             </if-diff>
           </div>
@@ -83,6 +88,11 @@
                     type:Object,
                     notify:true
                   },
+                  songUrl2Play:{
+                    type:String,
+                    value:``,
+                    observer:`_songChanged`
+                  },
                   icon:{
                     type:String,
                     value:`icons:add`
@@ -93,6 +103,11 @@
                     notify:true
                   }
                 }
+              }
+
+              _songChanged(songUrl){
+                 /* if(this.songUrl2Play != ``)
+                    this.$.player.play();*/
               }
 
               _btnAddClicked(){
@@ -107,8 +122,12 @@
                   }
               }
 
-              _btnPlayClicked(){
+              _btnPlayClicked(e){
+
+                  //this.$.player.pause();                
+                  this.songUrl2Play = e.currentTarget.song.urlPlay;                
                   this.dispatch({type:`PLAY_SONG`, data:{songId:this.song.songId} });
+
               }
 
               _cerrarVenta(){

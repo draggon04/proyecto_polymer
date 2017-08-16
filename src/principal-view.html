@@ -8,15 +8,17 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/shadycss/apply-shim.html">
 
 <link rel="import" href="styles/base.html">
 <link rel="import" href="polymer-custom.html">
 
-<link rel="import" href="settings/settings-view.html">
-<link rel="import" href="init/init-view.html">
-<link rel="import" href="login/login-view.html">
+<link rel="lazy-import" href="settings/settings-view.html">
+<link rel="lazy-import" href="init/init-view.html">
+<link rel="lazy-import" href="login/login-view.html">
 
 <dom-module id="principal-view">
     <template>
@@ -32,37 +34,34 @@
           display: none;
         }
 
-        nav>ul>li{    
-          width: 150px;
-          height: 25px;
-          color: white;
+        iron-selector>a{
           background-color: lightcyan;
-          padding: 15px;
-          cursor: pointer;
-          text-decoration: none;
-          margin: 0 0 18px 0;
           border-radius: 5%;
-          box-shadow: 0 0 3px 0 black;
+          box-shadow: 0 0 3px 0 black; 
+          color: gray;
+          cursor: pointer; 
+          display: block; 
+          height: 25px;
+          margin: 2rem 0 0 2.5rem; 
+          padding: 15px;
+          text-decoration: none;
+          width: 9.6rem;      
         }
 
-        nav>ul>li:hover{
+        iron-selector>a:first-child{
+          margin-top:-4rem;
+        }
+
+        iron-selector>a:hover{
           opacity: .7;
           background-color:  #6b1888;
           text-decoration:none;
           color:white;
         }
 
-        nav>ul>li>a{
-          background-color: inherit;
-          color: gray;
-          text-decoration: none;
-          padding-top: 0px;
-          margin: 50px 0 0 20px;          
-        }
-
         .img-logo{
-          width: 169px;
-          height: 115px;
+          width: 100px;
+          height: 70px;
           top: 10px;
           position: absolute;
           left: 60px;
@@ -74,8 +73,13 @@
             left: 14px;
         }
         .titulo{
-          height: 100px;
-          width: 500px;
+          background-color: seashell;
+          border: 2px solid gray;
+        }
+
+        .img-init{
+          width: 85%;
+          margin: 0 7.5%;
         }
 
       </style>
@@ -87,25 +91,27 @@
 
         <app-drawer slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar main-title  draw-toggle>
-            <div><img class="img-logo" src="images/logo.jpg" alt=""></div>
-          </app-toolbar>
-          <nav class="main-menu">
-            <ul>
-              <li><a href="/init-view"><iron-icon icon="icons:home"></iron-icon> [[localize('initViewMenuItem')]]</a></li>
-              <li><a href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a></li>
-              <li><a href="/login-view"><iron-icon icon="icons:account-box"></iron-icon> Login</a></li>
-            </ul>
-          </nav>
+            <div></div>
+          <iron-selector class="main-menu" selected="[[view]]" attr-for-selected="view" role="navigation">
+            <a view="login-view" href="/login-view"><iron-icon icon="icons:account-box"></iron-icon> Login</a></a>
+            <template is="dom-if" if="[[mostrarBotones]]">
+              <a view="init-view" href="/init-view"><iron-icon icon="icons:home" ></iron-icon> [[localize('initViewMenuItem')]]</a></a>
+              <a view="settings-view" href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a>
+            </template>
+          </iron-selector>
         </app-drawer>
 
         <app-header-layour>
-          <app-header slot="header">
-            <app-toolbar main-title><div >[[localize('mainTitle')]] [[user.displayName]]</div></app-toolbar>       
+          <app-header slot="header" waterfall>
+            <app-toolbar main-title class="titulo"><div>[[localize('mainTitle')]]</div></app-toolbar>       
           </app-header>
-          <iron-pages selected="[[routeData.view]]" attr-for-selected="view">
+          <iron-pages selected="[[routeData.view]]" attr-for-selected="view" role="main" fallback-selection="not-selection">
+            <login-view view="login-view"></login-view>          
             <init-view view="init-view" tail="{{routeTail}}"></init-view>
             <settings-view view="settings-view"></settings-view>
-           <login-view view="login-view"></login-view>
+            <div view="not-selection">
+              <img class="img-init" src="images/play-home.png" alt="">
+            </div>
           </iron-pages>
         </app-header-layour>
       </app-drawer-layout>
@@ -131,12 +137,51 @@
                       type:Object,
                       statePath:`user`,
                       observer:`_foo`
+                    },
+                    mostrarBotones:{
+                      type:Boolean,
+                      computed:`_cambioUsuario(user)` 
                     }
                   }
               }
 
+              _cambioUsuario(user){
+                 console.log(`_cambioUsuario ${user}`);
+                  return user != null;
+              }
+
+              static get observers(){
+                return ['_routeChanged(routeData.view)'];
+              }
+
+              _routeChanged(view){
+                  let viewToLoad = !view||view==``?`init-view`:view;
+
+                  if(viewToLoad == `init-view`)
+                    viewToLoad = `init/${viewToLoad}`;
+                    else
+                      if(viewToLoad == `settings-view`)
+                        viewToLoad = `settings/${viewToLoad}`;
+                      else
+                        if(viewToLoad == `login-view`)
+                          viewToLoad = `login/${viewToLoad}`;
+
+                  var resolverdPageUrl=this.resolveUrl(`${viewToLoad}.html`);
+
+                  Polymer.importHref(
+                    resolverdPageUrl,
+                    null,
+                    this._showPage404.bind(this),
+                    true
+                  );
+              }
+
+              _showPage404(){
+                this.page=`init-view`;
+              }
+
               _foo(user){
-                console.log(`${user}`);
+                console.log(`_foo ${user}`);
               }
  
           }

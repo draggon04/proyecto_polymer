@@ -1,85 +1,5 @@
-<!--<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
-<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
-<link rel="import" href="../authentication/authenticate-user.html">
-
-<dom-module id="login-view">
-
-    <template>
-      <h2>encabezado interno</h2>
-    <paper-button raise on-click="login">login</paper-button>
-    <paper-button raise on-click="logout">logout</paper-button>
-    <template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
-    <template is="dom-repeat" items="[[songs]]" as="song">
-      <p>[[song.name]]</p>
-      <paper-button song="[[song]]" on-click="_removeSong">
-        <iron-icon icon="icons:clear"></iron-icon>
-      </paper-button>
-    </template>
-
-    <paper-input id="songName"></paper-input>
-    <paper-button  on-click="_saveSong">Guardar</paper-button>
-    </template>
-
-    <script>
-
-      (function loginViewDefinition(loginView) {
-
-          'use strict';
-
-          class LoginView extends AuthenticateUser(Polymer.Element) {
-
-              static get is(){ return "login-view";}
-
-              static get properties(){
-                return{
-                  songs:{
-                    type:Object
-                  },
-                  statusKnown:{
-                    type:Object
-                  },
-                  userInfo:{
-                    type:Object
-                  }
-                }
-              }
-
-              _removeSong(e){
-                  const key = e.currentTarget.song.$key;
-                  this.$.query.ref.child(key).remove();
-              }
-
-              _saveSong(){
-                this.$.query.ref.push({name:this.$.songName.value});
-                this.$.songName.value = null;
-              }
-
-              logout(){
-                return this.logoutUser();
-              }
-
-              login(){
-                return this.loginUser();
-              }
-
-        handleError(){
-          console.log(`error`);
-        }
-
-          }
-
-          customElements.define(LoginView.is, LoginView);
-
-      })(window.loginView);
-    </script>
-
-</dom-module>-->
-
+<link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<!--<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">-->
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -98,7 +18,6 @@
 <dom-module id="login-view">
 
     <template>
-    	<h2>encabezado interno</h2>
 		<firebase-app
 		  auth-domain="nuevo-proyecto-cff85.firebaseapp.com"
 		  database-url="https://nuevo-proyecto-cff85.firebaseio.com/"
@@ -113,10 +32,18 @@
       path="/users/[[user.uid]]/songs" 
       data="{{songs}}">
     </firebase-query>
-		<paper-button raise on-click="login">login</paper-button>
-		<paper-button raise on-click="logout">logout</paper-button>
-		<template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
-    <template is="dom-repeat" items="[[songs]]" as="song">
+
+
+    <app-indexeddb-mirror session="{{user.uid}}" key="songs" data="{{songs}}" persisted-data="{{persistedSong}}"></app-indexeddb-mirror>
+
+    <div>
+    <
+      <paper-button raise on-click="login">login</paper-button>
+      <paper-button raise on-click="logout">logout</paper-button>
+    </div>
+
+		<!--<template is="dom-if" if="[[user]]">Welcome [[user.displayName]]</template>
+    <template is="dom-repeat" items="[[persistedSong]]" as="song">
       <p>[[song.name]]</p>
       <paper-button song="[[song]]" on-click="_removeSong">
         <iron-icon icon="icons:clear"></iron-icon>
@@ -124,7 +51,7 @@
     </template>
 
     <paper-input id="songName"></paper-input>
-    <paper-button  on-click="_saveSong">Guardar</paper-button>
+    <paper-button  on-click="_saveSong">Guardar</paper-button>-->
     </template>
 
     <script>
@@ -133,15 +60,104 @@
 
           'use strict';
 
-          class LoginView extends PolymerCustom(Polymer.Element) {
+          let ajax = (superclass)=>{
+                    return class ajaxClass extends superclass
+                    {
+                      sendRequest(request)
+                      {
+                        let xhttp = new XMLHttpRequest();
+                        xhttp.open(request.method, request.url, true);
+                        xhttp.setRequestHeader("Authorization", "Bearer "+ request.token);
+                        xhttp.onreadystatechange = function() {
+                          if (this.readyState == 4 && this.status == 200) {
+                            let obj = JSON.parse(this.responseText);
+                            window.dispatchEvent(new CustomEvent(request.eventSucces,{bubbles:true, composed:true, detail:obj}));
+                          }
+                        };
+      
+                        xhttp.send();
+                    }
+                }
+            }
+
+              let token = "";
+              let typeToken = "";
+
+          function login(callback) {
+
+              var CLIENT_ID = '45c8a6812f954dd5b683f8a75fa5c097';
+              var REDIRECT_URI = 'http://localhost:5000';
+              function getLoginURL(scopes) {
+                  return 'https://accounts.spotify.com/authorize?client_id=' + CLIENT_ID +
+                    '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+                    '&scope=' + encodeURIComponent(scopes.join(' ')) +
+                    '&response_type=token';
+              }
+              
+              var url = getLoginURL([
+                  'user-read-email'
+              ]);
+              
+              var width = 450,
+                  height = 730,
+                  left = (screen.width / 2) - (width / 2),
+                  top = (screen.height / 2) - (height / 2);
+          
+              window.addEventListener("message", function(event) {
+                  let posIni = event.detail.href.indexOf('access_token');
+                  let posFin = event.detail.href.indexOf('&',posIni);
+                  
+                  token = event.detail.href.substring(posIni+'access_token='.length, posFin);
+
+                  posIni = event.detail.href.indexOf('token_type=');
+                  posFin = event.detail.href.indexOf('&', posIni);
+
+                  typeToken = event.detail.href.substring(posIni+'token_type='.length, posFin);
+
+                  console.log(`${event.detail.href}|| ${token}, ${typeToken}`);
+
+                  window.dispatchEvent(new CustomEvent(`loginSuccess`, {bubbles:true, composed:true, detail: {token:token, typeToken:typeToken}}));
+
+              }, false);
+
+             var w = window.open(url,'Spotify',
+                                  'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+                                 );
+              w.onbeforeunload = function() 
+              { 
+                  window.dispatchEvent(new CustomEvent('message', {bubbles:true, composed:true, detail:w.location})); 
+                  return false; 
+              }
+              
+          }
+
+          function getUserData(accessToken) {
+              return $.ajax({
+                  url: 'https://api.spotify.com/v1/me',
+                  headers: {
+                     'Authorization': 'Bearer ' + accessToken
+                  }
+              });
+          }
+
+          function getNewRelease(accessToken){
+              return ({
+                  url: 'https://api.spotify.com/v1/browse/new-releases',
+                  headers: {
+                     'Authorization': 'Bearer ' + accessToken
+                  }
+              });
+
+          }
+
+          class ReduxMixinClass extends ReduxMixin(Object){};
+
+          class LoginView extends (PolymerCustom(Polymer.Element)) {
 
               static get is(){ return "login-view";}
 
               static get properties(){
               	return{
-              		songs:{
-              			type:Object
-              		},
               		statusKnown:{
               			type:Object
               		},
@@ -150,43 +166,91 @@
                   },
                   user:{
                     type:Object,
-                    observer:`_usuarioStatusChanged`
+                    statePath:`user`,
+                    observer:`userChanged`
                   }
               	}
               }
 
-              _usuarioStatusChanged(user){
+             sendRequest(request)
+              {
+                let xhttp = new XMLHttpRequest();
+                xhttp.open(request.method, request.url, true);
+                xhttp.setRequestHeader("Authorization", "Bearer "+ request.token);
+                xhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                    let obj = JSON.parse(this.responseText);
+                    window.dispatchEvent(new CustomEvent(request.eventSuccess,{bubbles:true, composed:true, detail:obj}));
+                  }
+                };
 
-                let userInf = {user:null};
-                if(user != null)
-                  userInf = user;
-                this.dispatch( {type:`UPDATE_USER`, data: userInf});
+                xhttp.send();
+            }
+
+              userChanged(user){
+                  if(user)
+                  {
+                      this.sendRequest({url:`https://api.spotify.com/v1/browse/new-releases`, 
+                                  method:`GET`,
+                                  eventSuccess:`songDownloaded`, 
+                                  token:token});
+                  }
               }
 
-              _removeSong(e){
-                  const key = e.currentTarget.song.$key;
-                  this.$.query.ref.child(key).remove();
+              songDownloaded(data){
+                  let redux = new ReduxMixinClass();
+
+                  redux.dispatch({type:`LOAD_SONGS`, data: obj});
               }
 
-              _saveSong(){
-                this.$.query.ref.push({name:this.$.songName.value, age:24});
-                this.$.songName.value = null;
+              connectedCallback(){
+                super.connectedCallback();
+                window.addEventListener(`loginSuccess`, this.loginSuccess);                
+                window.addEventListener(`userSigned`, this.userSigned);
+                window.addEventListener(`songDownloaded`, this.songDownloaded);
               }
 
               logout(){
-                //this.dispatch( {type:`UPDATE_USER`, data: {user:null} });
-              	return this.$.auth.signOut();
+                return this.$.auth.signOut();
               }
+
+              loginSuccess(event){
+                  let xhttp = new XMLHttpRequest();
+                  xhttp.open("GET", "https://api.spotify.com/v1/me", true);
+                  xhttp.setRequestHeader("Authorization", "Bearer "+event.detail.token);
+                  xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                      let objectUsuario = JSON.parse(this.responseText);
+                      objectUsuario.displayName = objectUsuario.display_name;
+                      if(objectUsuario.images.length > 0 )
+                        objectUsuario.photoURL = objectUsuario.images[0].url;
+                      window.dispatchEvent(new CustomEvent(`userSigned`,{bubbles:true, composed:true, detail:objectUsuario}));
+                    }
+                  };
+
+                  xhttp.send();
+              }
+
+             userSigned(event) {
+              console.log(`userSigned`);
+              let redux = new ReduxMixinClass();
+
+              redux.dispatch({type:`UPDATE_USER`, data:event.detail, token:token});
+             }
 
               login(){
-
-                //this.dispatch( {type:`UPDATE_USER`, data: this.user});
-              	return this.$.auth.signInWithPopup();
+                login(function(accessToken) {
+                    getUserData(accessToken)
+                        .then(function(response) {
+                            loginButton.style.display = 'none';
+                            resultsPlaceholder.innerHTML = template(response);
+                        });
+                    });
               }
 
-				handleError(){
-					console.log(`error`);
-				}
+      				handleError(){
+      					console.log(`error`);
+      				}
 
           }
 

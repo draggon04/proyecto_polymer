@@ -1,0 +1,72 @@
+[debug] [2017-08-15T20:46:17.718Z] ----------------------------------------------------------------------
+[debug] [2017-08-15T20:46:17.720Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\margarito.mancilla\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-08-15T20:46:17.721Z] CLI Version:   3.9.2
+[debug] [2017-08-15T20:46:17.721Z] Platform:      win32
+[debug] [2017-08-15T20:46:17.721Z] Node Version:  v6.11.2
+[debug] [2017-08-15T20:46:17.721Z] Time:          Tue Aug 15 2017 15:46:17 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:17.721Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-15T20:46:17.736Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-15T20:46:17.736Z] > authorizing via signed-in user
+[debug] [2017-08-15T20:46:17.738Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-15T20:46:17.739Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/f9gHb36c1qDmtpAGSzPh63RldFaXsVGgO-RL6O4kpv7EBu1lety_Ae2lg9PbxVmB',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Tue Aug 15 2017 15:46:17 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:18.020Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-15T20:46:18.029Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/nuevo-proyecto-cff85  
+ Tue Aug 15 2017 15:46:18 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:18.632Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-15T20:46:18.634Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/nuevo-proyecto-cff85/tokens  
+ Tue Aug 15 2017 15:46:18 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:19.108Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\margarito.mancilla\Documents\GitHub\proyecto_polymer'...
+[info] 
+[debug] [2017-08-15T20:46:19.117Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/nuevo-proyecto-cff85  
+ Tue Aug 15 2017 15:46:19 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:19.439Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-15T20:46:19.441Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/1009901662502/clients/_:getWebAppConfig  
+ Tue Aug 15 2017 15:46:19 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-15T20:46:20.477Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: /
+[info] +  hosting: Local server: http://localhost:5000
+
+[debug] [2017-08-16T00:51:11.027Z] ----------------------------------------------------------------------
+[debug] [2017-08-16T00:51:11.027Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\margarito.mancilla\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-08-16T00:51:11.027Z] CLI Version:   3.9.2
+[debug] [2017-08-16T00:51:11.027Z] Platform:      win32
+[debug] [2017-08-16T00:51:11.027Z] Node Version:  v6.11.2
+[debug] [2017-08-16T00:51:11.027Z] Time:          Tue Aug 15 2017 19:51:11 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:11.027Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-16T00:51:11.043Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-16T00:51:11.043Z] > authorizing via signed-in user
+[debug] [2017-08-16T00:51:11.058Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-16T00:51:11.058Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/f9gHb36c1qDmtpAGSzPh63RldFaXsVGgO-RL6O4kpv7EBu1lety_Ae2lg9PbxVmB',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Tue Aug 15 2017 19:51:11 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:22.292Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-16T00:51:22.308Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/nuevo-proyecto-cff85  
+ Tue Aug 15 2017 19:51:22 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:26.223Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-16T00:51:26.223Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/nuevo-proyecto-cff85/tokens  
+ Tue Aug 15 2017 19:51:26 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:30.587Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\margarito.mancilla\Documents\GitHub\proyecto_polymer'...
+[info] 
+[debug] [2017-08-16T00:51:30.587Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/nuevo-proyecto-cff85  
+ Tue Aug 15 2017 19:51:30 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:47.877Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-16T00:51:47.877Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/1009901662502/clients/_:getWebAppConfig  
+ Tue Aug 15 2017 19:51:47 GMT-0500 (Central Daylight Time (Mexico))
+[debug] [2017-08-16T00:51:52.100Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: /
+[info] +  hosting: Local server: http://localhost:5000
+

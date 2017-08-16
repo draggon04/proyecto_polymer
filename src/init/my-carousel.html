@@ -26,9 +26,13 @@
         <div>[[title]]</div>
         <div class="carousel-elements"> 
           <template is="dom-repeat" items="[[songs]]" as="song">
-  			     <carousel-item class="carousel-item" song="[[song]]" type="[[type]]"></carousel-item>
+  			     <carousel-item on-song-play="_playSong" class="carousel-item" song="[[song]]" type="[[type]]"></carousel-item>
           </template>
         </div>
+        <audio id="player">
+          <source  src="[[songToPlay.urlPlay]]" type="audio/ogg">
+          <source  src="[[songToPlay.urlPlay]]" type="audio/mpeg">
+        </audio>        
     </template>
 
     <script>
@@ -56,6 +60,11 @@
                   }
                 };
               }
+
+          _playSong(e){
+            /*this.$.player.pause();
+            this.$.player.play();*/
+          }
 
           }
 

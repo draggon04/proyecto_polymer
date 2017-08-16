@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<link rel="import" href="../styles/base.html">
+<link rel="import" href="../polymer-custom.html">
+
+<dom-module id="add-lyric">
+
+    <template>
+
+        <style include="base">
+          #dialogo{
+            width: 30rem;
+            height: 20rem;
+          }
+        </style>
+
+        <paper-button on-click="_showDialog"><iron-icon icon="icons:speaker-notes"></paper-button>
+        <paper-dialog  id="dialogo">
+          <h2>[[localize("dlgLyricAddTitle")]]</h2>
+          <p><b>[[localize("dlgLyricAddSongName")]]</b> [[song.name]]</p>
+          <paper-textarea id="lyric" max-rows="5" label="[[localize('dlgLyricAddSongLyric')]]" value="[[song.lyric]]"></paper-textarea>
+          <paper-button on-click="_submitLyric">[[localize("dlgLyricAddSongBSubmit")]]</paper-button>  
+        </paper-dialog>
+    </template>
+
+    <script>
+
+      (function addLyricDefinition(addLyric) {
+          'use strict';
+
+          class AddLyric extends PolymerCustom(Polymer.Element) {
+
+              static get is(){ return `add-lyric`;}
+
+              static get properties(){
+                return{
+                  song:{
+                    type:Object
+                  }
+                }
+              }
+
+              _showDialog(){
+                this.$.dialogo.open();
+              }
+
+              _submitLyric(){
+                const lyric = this.$.lyric.value;
+
+                this.dispatch({type:`ADD_LYRIC`, data:{lyric:lyric, songId:this.song.songId}});
+              }
+              
+          }
+
+          customElements.define(AddLyric.is, AddLyric);
+          
+      })(window.addLyric);
+
+    </script>
+
+</dom-module>
