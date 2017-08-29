@@ -26,8 +26,17 @@
       <style include="base">
         
         :host {
-          --app-primary-color: black;
-          --app-secondary-color: black;
+        }
+
+        app-drawer div{
+          height: 3rem;
+          width: 100%;
+        }
+
+        .menu1
+        {
+          width: 3rem;
+          height: 30rem;
         }
 
         app-drawer-layout:not([narrow]) [drawer-toggle] {
@@ -75,11 +84,20 @@
         .titulo{
           background-color: seashell;
           border: 2px solid gray;
+
         }
 
         .img-init{
           width: 85%;
           margin: 0 7.5%;
+        }
+
+        #contentContainer{          
+        }
+
+        .menu-title{
+          width: 3rem;
+          height: 2rem;
         }
 
       </style>
@@ -90,21 +108,23 @@
       <app-drawer-layout class="styleCustom" fullbleed narrow="{{narrow}}">
 
         <app-drawer slot="drawer" swipe-open="[[narrow]]">
-          <app-toolbar main-title  draw-toggle>
-            <div></div>
-          <iron-selector class="main-menu" selected="[[view]]" attr-for-selected="view" role="navigation">
-            <a view="login-view" href="/login-view"><iron-icon icon="icons:account-box"></iron-icon> Login</a></a>
-            <template is="dom-if" if="[[mostrarBotones]]">
-              <a view="init-view" href="/init-view"><iron-icon icon="icons:home" ></iron-icon> [[localize('initViewMenuItem')]]</a></a>
-              <a view="settings-view" href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a>
-            </template>
-          </iron-selector>
+          <app-toolbar main-title class="menu-title"><div>Menu</div></app-toolbar>
+          <div> 
+            <iron-selector class="main-menu" selected="[[view]]" attr-for-selected="view" role="navigation">
+              <a view="login-view" href="/login-view"><iron-icon icon="icons:account-box"></iron-icon> Login</a></a>
+             <template is="dom-if" if="[[mostrarBotones]]">
+                <a view="init-view" href="/init-view"><iron-icon icon="icons:home" ></iron-icon> [[localize('initViewMenuItem')]]</a></a>
+                <a view="settings-view" href="/settings-view"><iron-icon icon="icons:settings"></iron-icon> [[localize('settingViewMenuItem')]]</a>
+              </template>
+            </iron-selector>
+          </div>
         </app-drawer>
 
         <app-header-layour>
           <app-header slot="header" waterfall>
             <app-toolbar main-title class="titulo"><div>[[localize('mainTitle')]]</div></app-toolbar>       
           </app-header>
+          <div class="menu">
           <iron-pages selected="[[routeData.view]]" attr-for-selected="view" role="main" fallback-selection="not-selection">
             <login-view view="login-view"></login-view>          
             <init-view view="init-view" tail="{{routeTail}}"></init-view>
@@ -113,6 +133,7 @@
               <img class="img-init" src="images/play-home.png" alt="">
             </div>
           </iron-pages>
+          </div>
         </app-header-layour>
       </app-drawer-layout>
 

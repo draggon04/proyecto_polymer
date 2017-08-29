@@ -11,20 +11,34 @@
     <template>
 
       <style include="base">
+
+        p{
+              margin: 0 20%;
+        }
         
         .image{
-          width: 15rem;
-          height: 15rem;
+          width: 14rem;
+          height: 14rem;
+          margin: 0 6%;
         }
+        
 
         .data-img{
             position: relative;
-            bottom: 4.7rem;
+            /*bottom: 4.7rem;*/
             margin: 0;
             padding: 0;
             background: black;
             opacity: 0.7;
             color: white;
+        }
+
+        .item{
+          background-color: #F8F8CC;
+          border: 2px solid black;
+          box-shadow: 2.5px 2.5px 1.2px grey;
+          width: 16rem;
+          height: 17rem;
         }
 
         .item:hover{
@@ -37,18 +51,58 @@
           visibility: hidden;
         }
 
-        .item{
-          height: 15rem;
+                .button-circle{
+          border-radius: 50%;
+          background-color: lightgrey;
+          width: 25px;
+          height: 25px;
         }
 
+        .buttons{
+          width: 200px;
+          height: 30px;
+          display: inline-flex;
+        }
+
+
       </style>
+
+    <firebase-auth id="auth" user="{{user}}" provider="anonimous" statusKnown="{{statusKnown}}" on-error="handleError">
+    </firebase-auth>
+    <firebase-query 
+      id="query" 
+      path="/users/[[user.id]]/songs" 
+      data="{{songs}}">
+    </firebase-query>    
+    <firebase-query 
+      id="query" 
+      path="/users/[[user.id]]/songs" 
+      data="{{songs}}">
+    </firebase-query>
+
       <div class="item" on-click="_carouselItemSel">
-        <img class="image" src$="[[song.thumb]]">
+        <img class="image" src$="[[image]]">
         <div class="data-img">
           <p>[[song.name]]</p>
-          <p>[[song.singer]]</p>
-        </div> 
+        </div>
+        <div class="buttons">
+          <iron-icon  class="button-circle"  song="[[song]]" icon="av:play-circle-filled" on-click="_btnPlayClicked"></iron-icon>
+          <div class="button-circle">
+            <if-diff if="" lhs="[[type]]" equals rhs="user">
+              <template>
+                <iron-icon  class="button-circle" icon="icons:check" on-click="_btnRemoveClicked"></iron-icon>
+              </template>
+            </if-diff>
+            <if-diff if="" lhs="[[type]]" equals rhs="recomedation">
+              <template>
+                <iron-icon class="button-circle" icon="icons:add" on-click="_btnAddClicked"></iron-icon>               
+              </template>
+            </if-diff>
+          </div>
+          
+        </div>
       </div>
+
       <paper-dialog id="dialogo">
         <item-detail visible="{{visible}}" song="[[song]]" type="[[type]]"></item-detail>
       </paper-dialog> 
@@ -83,12 +137,35 @@
                     type:String,
                     value:``,
                     notify:true
+                  },
+                  image:{
+                    type:String,
+                    computed:`_`,
+                    computed:`_songUpdated(song)`
                   }
                 }
               }
 
-              _cambiaValor(NumVecesRep){
-                return NumVecesRep;
+              _cambiaValor(numVecesRep){ return numVecesRep; }
+
+              _btnRemoveClicked(){
+                
+              }
+
+              _btnAddClicked(){
+                  db.ref(`users/${userSel.id}`).push(this.song);
+                  this.dispatch({type:`ADD_SONG`, data:this.song});
+
+                  
+              }
+
+              _songUpdated(song){
+                  console.log(`${song}`);
+
+                  if(song && song.images)
+                    return song.images[0].url;
+                  else
+                    return '';
               }
 
               _updateOncesPlayed(valor){

@@ -30,28 +30,15 @@
               <td>
                 <add-lyric song="[[song]]"></add-lyric>
               </td>
-              <td><audio controls>
+              <td>
+                <audio controls>
                   <source src="[[song.urlPlay]]" type="audio/ogg">
-                  <source src="[[song.urlPlay]]" type="audio/mpeg"> </audio></td>
+                  <source src="[[song.urlPlay]]" type="audio/mpeg">
+                </audio></td>
             </tr>
           </template>
         </tbody>
       </table>
-
-<!--      <table>
-        <thead>
-          <tr>
-            <th>Canción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template is="dom-repeat" items="[[songsToDisplay]]" as="song" sort="_ordenar" observer = "type numOncesPlayed">
-            <tr>
-              <td>[[song.name]]</td>
-            </tr>
-          </template>
-        </tbody>
-      </table>-->
 
     </template>
 
@@ -78,10 +65,8 @@
                 }
               }
 
-              _ordenar(song1, song2){
-
-                    return song1.numOncesPlayed == song2.numOncesPlayed? 0: song2.numOncesPlayed > song1.numOncesPlayed? 1: -1;
-
+              _ordenar(song1, song2) {
+                return song1.numOncesPlayed == song2.numOncesPlayed? 0: song2.numOncesPlayed > song1.numOncesPlayed? 1: -1;
               }
 
               _songUpdate(songs){

@@ -47,10 +47,10 @@
               <td>
                 <add-lyric song="[[song]]"></add-lyric>
               </td>
-              <!--<td> <iron-icon icon="icons:speaker-notes"></iron-icon></td>-->
               <td><audio controls>
                   <source src="[[song.urlPlay]]" type="audio/ogg">
-                  <source src="[[song.urlPlay]]" type="audio/mpeg"> </audio></td>
+                  <source src="[[song.urlPlay]]" type="audio/mpeg"> </audio>
+              </td>
             </tr>
           </template>
         </tbody>
@@ -74,8 +74,16 @@
                 sognsFromRedox:{
                   type:Array,
                   statePath:`songs`
+                },
+                categories:{
+                  type:Array,
+                  statePath:`_categoriesChanged`
                 }
               }
+            }
+
+            _categoriesChanged(categories){
+
             }
 
             _btnBuscar(){

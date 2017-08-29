@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
-<!--<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">-->
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -37,7 +36,6 @@
     <app-indexeddb-mirror session="{{user.uid}}" key="songs" data="{{songs}}" persisted-data="{{persistedSong}}"></app-indexeddb-mirror>
 
     <div>
-    <
       <paper-button raise on-click="login">login</paper-button>
       <paper-button raise on-click="logout">logout</paper-button>
     </div>
@@ -86,6 +84,7 @@
           function login(callback) {
 
               var CLIENT_ID = '45c8a6812f954dd5b683f8a75fa5c097';
+              //var REDIRECT_URI = 'https://nuevo-proyecto-cff85.firebaseapp.com';
               var REDIRECT_URI = 'http://localhost:5000';
               function getLoginURL(scopes) {
                   return 'https://accounts.spotify.com/authorize?client_id=' + CLIENT_ID +
@@ -95,7 +94,7 @@
               }
               
               var url = getLoginURL([
-                  'user-read-email'
+                  'user-read-email','playlist-modify', 'playlist-modify-private', 'user-library-modify', 'user-library-read'
               ]);
               
               var width = 450,
@@ -152,7 +151,7 @@
 
           class ReduxMixinClass extends ReduxMixin(Object){};
 
-          class LoginView extends (PolymerCustom(Polymer.Element)) {
+          class LoginView extends PolymerCustom(Polymer.Element) {
 
               static get is(){ return "login-view";}
 
@@ -172,8 +171,8 @@
               	}
               }
 
-             sendRequest(request)
-              {
+            sendRequest(request)
+            {
                 let xhttp = new XMLHttpRequest();
                 xhttp.open(request.method, request.url, true);
                 xhttp.setRequestHeader("Authorization", "Bearer "+ request.token);
@@ -185,32 +184,48 @@
                 };
 
                 xhttp.send();
-            }
+              }
 
               userChanged(user){
                   if(user)
                   {
+
+                      userSel = user;
                       this.sendRequest({url:`https://api.spotify.com/v1/browse/new-releases`, 
                                   method:`GET`,
                                   eventSuccess:`songDownloaded`, 
+                                  token:token});
+
+                      this.sendRequest({url:`https://api.spotify.com/v1/browse/categories`, 
+                                  method:`GET`,
+                                  eventSuccess:`loadCategies`, 
                                   token:token});
                   }
               }
 
               songDownloaded(data){
-                  let redux = new ReduxMixinClass();
 
-                  redux.dispatch({type:`LOAD_SONGS`, data: obj});
+                  let redux = new ReduxMixinClass();
+                  redux.dispatch({type:`LOAD_SONGS_RECOMMENDED`, data: data.detail});
               }
+
+              loadCategies(data){
+                  let redux = new ReduxMixinClass();
+                  redux.dispatch({type:`LOAD_CATEGORIES`, data: data.detail});
+              }
+
 
               connectedCallback(){
                 super.connectedCallback();
                 window.addEventListener(`loginSuccess`, this.loginSuccess);                
                 window.addEventListener(`userSigned`, this.userSigned);
                 window.addEventListener(`songDownloaded`, this.songDownloaded);
+                window.addEventListener(`loadCategies`, this.loadCategies);
               }
 
               logout(){
+                userSel = null;
+                this.dispatch({type:`UPDATE_USER`, data:null});
                 return this.$.auth.signOut();
               }
 

@@ -4,12 +4,12 @@
 	"sources":[
 		"src/**/*",
 		"images/**/*",
-		"bower.json",
-		"node_modules/**/*"
+		"package.json",
+		"bower.json"
 	],
 	"extraDependencies":[
 		"manifest.json",
-		"package.json",
+		"node_modules/**/*",
 		"locales/*.json",
 		"bower_components/webcomponentsjs/*.js"
 	],
